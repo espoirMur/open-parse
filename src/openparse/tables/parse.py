@@ -247,7 +247,6 @@ def _ingest_with_pdfplumber(
     found_tables = []
     table_settings = getattr(args, "table_parse_settings", {})
     for page_number, page in enumerate(pdf_plumber_doc.pages):
-
         tables = page.find_tables(table_settings)
         if not tables:
             continue
@@ -266,7 +265,7 @@ def _ingest_with_pdfplumber(
             table_element = TableElement(
                 bbox=table_bbox, text=table_markdown)
             found_tables.append(table_element)
-        return found_tables
+    return found_tables
 
 
 def ingest(
