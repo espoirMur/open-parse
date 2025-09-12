@@ -254,12 +254,19 @@ def _ingest_with_pdfplumber(
             table_bounding_box = table.bbox
             table_data = table.extract()
             table_markdown = pdf_plumber_table_data_to_markdown(table_data)
+            # the application seems to use pdfminer style coordinates system, let make sure their are  align with the pdfplumber ones.
+
+            # check this discussion https://github.com/jsvine/pdfplumber/issues/198
+            # table bounding 3 is the bottom
+            # table bounding 1 is the top
+            y0 = page.height - table_bounding_box[3]
+            y1 = page.height - table_bounding_box[1]
             table_bbox = Bbox(
                 page=page_number,
                 x0=table_bounding_box[0],
-                y0=table_bounding_box[1],
+                y0=y0,
                 x1=table_bounding_box[2],
-                y1=table_bounding_box[3],
+                y1=y1,
                 page_width=page.width,
                 page_height=page.height)
             table_element = TableElement(
